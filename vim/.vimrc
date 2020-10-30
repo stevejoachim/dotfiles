@@ -114,9 +114,6 @@ Plug 'tell-k/vim-autopep8'
 " Plug 'scrooloose/syntastic'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-" Plug 'mg979/vim-visual-multi', {'branch': 'master'}
-" Plug 'neoclide/coc.nvim', {'branch': 'release'}
-" Plug 'liuchengxu/vim-which-key' " glitching out with nerdtree
 call plug#end()
 
 " --Airline Configuration--
@@ -157,42 +154,7 @@ autocmd FileType python noremap <buffer> <leader>p :call Autopep8()<CR>
 let g:autopep8_disable_show_diff=1 " don't show changes
 
 " --Syntastic Configuration--
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
-""""""""
-" Misc "
-""""""""
-
-" --Vim Visual Multi Configuration--
-" let g:VM_maps = {}
-" let g:VM_maps["Add Cursor Down"] = '<C-j>'      " start selecting down
-" let g:VM_maps["Add Cursor Up"]   = '<C-k>'        " start selecting up
-
-" Simple fuzzy finder, type <leader>f<search><TAB> to search
-" set path=.,**
-" nnoremap <leader>f :find *
-" nnoremap <leader>s :sfind *
-" nnoremap <leader>v :vert sfind *
-" nnoremap <leader>t :tabfind *
-
-" Which Key Configuration
-" nnoremap <silent><leader> :WhichKey '<Space>'<CR>
-" nnoremap <silent> <localleader> :WhichKey  ','<CR>
-
-" Navigating buffers
-" set wildcharm=<C-z>
-" nnoremap <leader>b :buffer <C-z><S-Tab>
-" nnoremap <leader>B :sbuffer <C-z><S-Tab"
-
-" " Get absolute line numbers on insert mode and out of focus panes
-" :augroup numbertoggle
-" :  autocmd!
-" :  autocmd BufEnter,FocusGained,InsertLeave * set relativenumber
-" :  autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
-" :augroup END
-
-" Hit `%` on `if` to jump to `else`. Built-in plugin
-" runtime macros/matchit.vim
-
+" let g:syntastic_always_populate_loc_list = 1
+" let g:syntastic_auto_loc_list = 1
+" let g:syntastic_check_on_open = 1
+" let g:syntastic_check_on_wq = 0
