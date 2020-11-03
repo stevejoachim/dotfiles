@@ -19,6 +19,7 @@ set scrolloff=5
 set mouse=a " Enable mouse
 map <ScrollWheelUp> <C-Y>| " Smoother scrolling
 map <ScrollWheelDown> <C-E>
+
 " Visual Settings
 syntax enable " enable syntax processing
 set background=dark
@@ -62,6 +63,12 @@ inoremap jk <esc>
 nnoremap U <C-R>
 nnoremap <Leader>w :update<CR>
 
+" Mappings to move by visual lines when wrapped
+nnoremap k gk
+nnoremap j gj
+nnoremap <up> gk
+nnoremap <down> gj
+
 " Mappings for moving around buffers
 nnoremap <C-n> :bprevious<CR>
 nnoremap <C-m> :bnext<CR>
@@ -73,6 +80,13 @@ nnoremap L g$
 nnoremap K <C-b> " page up
 nnoremap J <C-f> " page down
 nnoremap M J
+
+" Mapping to make Y work like C and D
+nnoremap Y y$
+
+" Mapping to indent without exiting visual mode
+vnoremap > >gv
+vnoremap < <gv
 
 " Mappings for tabs (TBD)
 nnoremap <leader>tn :tabnew<CR>| " Quickly open new tab
