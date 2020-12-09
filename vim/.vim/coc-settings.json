@@ -1,0 +1,14 @@
+{
+  "python.jediEnabled": false,
+  "coc.preferences.formatOnSaveFiletypes": [
+    "python",
+    "python3",
+    "javascript",
+    "typescript",
+    "typescriptreact",
+    "json",
+    "javascriptreact",
+    "typescript.tsx",
+    "graphql"
+  ]
+}

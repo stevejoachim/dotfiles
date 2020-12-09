@@ -62,3 +62,11 @@ npx() {
     [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
     npx "$@"
 }
+
+# Vim needs node for Coc plugin, so made sure it is loaded before starting
+alias vim="node -v >/dev/null && vim"
+
+# Add Go directory to path
+path+=$(go env GOPATH)/bin
+export PATH
+
