@@ -22,9 +22,6 @@ bindkey jk vi-cmd-mode
 DISABLE_LS_COLORS="true"
 alias ls='lsd'
 
-# Initialize z (jump around) https://github.com/rupa/z/
-. ~/.zprezto-contrib/z/z.sh
-
 # Shortcut to love2d game framework
 alias love="/Applications/love.app/Contents/MacOS/love"
 

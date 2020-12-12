@@ -41,8 +41,10 @@ set splitright " Open new vertical split panes on the right
 " Tab Settings
 filetype indent on " load filetype-specific indent files
 autocmd FileType python setlocal tabstop=4 shiftwidth=4 softtabstop=4 expandtab
+autocmd FileType json setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab
 autocmd FileType javascript setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab
 autocmd FileType go setlocal tabstop=4 shiftwidth=4 softtabstop=0 noexpandtab
+autocmd FileType yaml setlocal tabstop=2 shiftwidth=2 softtabstop=2 expandtab
 "tabstop: number of visual spaces per TAB
 "softtabstop: number of spaces in tab when editing
 "expandtab: typed tabs are treated as spaces
@@ -84,8 +86,9 @@ nnoremap <leader>fc :bdelete<CR>
 " Mappings for motion
 nnoremap H g^
 nnoremap L g$
-nnoremap K <C-b> " page up
-nnoremap J <C-f> " page down
+" page up and down
+nnoremap K <C-b>
+nnoremap J <C-f>
 nnoremap M J
 
 " Mapping to make Y work like C and D
@@ -206,7 +209,8 @@ let g:coc_global_extensions = [
   \ 'coc-json',
   \ 'coc-python',
   \ 'coc-vimlsp',
-  \ 'coc-go'
+  \ 'coc-go',
+  \ 'coc-yaml'
   \ ]
 
 set updatetime=300
@@ -227,7 +231,7 @@ function! s:check_back_space() abort
 endfunction
 
 " Use <c-space> to trigger completion.
-inoremap <silent><expr> <c-space> coc#refresh()
+inoremap <silent><expr> <c-@> coc#refresh()
 
 " Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
 " Coc only does snippet and additional edit on confirm.
