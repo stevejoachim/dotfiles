@@ -57,7 +57,7 @@ set hlsearch " highlight matches
 
 " Folding Settings
 set foldenable " enable folding
-set foldlevelstart=10 " open most folds by default
+set foldlevelstart=20 " open most folds by default
 set foldnestmax=10 " 10 nested folds max
 set foldmethod=indent " this is good for python, fold based on indents
 
@@ -70,13 +70,17 @@ let mapleader=" "
 let g:maplocalleader = ','
 inoremap jk <esc>
 nnoremap U <C-R>
-nnoremap <Leader>w :update<CR>
+nnoremap <Leader>s :update<CR>
 
 " Mappings to move by visual lines when wrapped
 nnoremap k gk
 nnoremap j gj
 nnoremap <up> gk
 nnoremap <down> gj
+onoremap k gk
+onoremap j gj
+onoremap <up> gk
+onoremap <down> gj
 
 " Mappings for moving around buffers
 nnoremap <C-n> :bprevious<CR>
@@ -85,27 +89,44 @@ nnoremap <leader>fc :bdelete<CR>
 
 " Mappings for motion
 nnoremap H g^
+onoremap H g^
 nnoremap L g$
-" page up and down
-nnoremap K <C-b>
-nnoremap J <C-f>
+onoremap L g$
+inoremap <C-h> <Left>
+inoremap <C-j> <Down>
+inoremap <C-k> <Up>
+inoremap <C-l> <Right>
+
+" Mappings for paging and scrolling
+nnoremap K 5k
+nnoremap J 5j
+nnoremap <C-k> <C-y>
+nnoremap <C-j> <C-e>
 nnoremap M J
 
-" Mapping to make Y work like C and D
+" Mappings to make Y work like C and D
 nnoremap Y y$
 
-" Mapping to indent without exiting visual mode
+" Mappings to indent without exiting visual mode
 vnoremap > >gv
 vnoremap < <gv
 
 " Mappings for tabs (TBD)
-nnoremap <leader>tn :tabnew<CR>| " Quickly open new tab
+nnoremap <leader>tn :tabnew<CR>
+nnoremap <leader>tc :tabclose<CR>
+
+" Remove search highlighting
+nnoremap <leader><CR> :nohl<CR>
 
 " Mappings for moving between panes
-map <C-j> <C-W>j
-map <C-k> <C-W>k
+" map <C-j> <C-W>j
+" map <C-k> <C-W>k
 map <C-h> <C-W>h
 map <C-l> <C-W>l
+
+" Insert blank line
+noremap [<space> O<Esc>j
+noremap ]<space> o<Esc>k
 
 " Open help files in the right pane of a vertical split
 cabbrev h vert rightb h
@@ -130,6 +151,7 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-repeat'
+Plug 'justinmk/vim-sneak'
 Plug 'romainl/vim-cool' " auto clear search highlighting
 Plug 'ryanoasis/vim-devicons'
 Plug 'preservim/tagbar'
@@ -157,13 +179,7 @@ let NERDTreeShowHidden=1
 let NERDTreeMouseMode=2 " single click to open directories
 
 " --Easymotion configuration--
-let g:EasyMotion_do_mapping = 0 " Disable default mappings
-" Jump to anywhere you want with `f{char}{label}`
-nmap f <Plug>(easymotion-s)
 let g:EasyMotion_smartcase = 1 " Turn on case-insensitive feature
-" JK motions: Line motions
-map <Leader>j <Plug>(easymotion-j)
-map <Leader>k <Plug>(easymotion-k)
 
 " --Commentary Configuration--
 map <Leader>cc <Plug>CommentaryLine

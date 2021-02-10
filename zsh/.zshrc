@@ -1,4 +1,4 @@
-zmodload zsh/zprof
+# zmodload zsh/zprof
 #
 # Executes commands at the start of an interactive session.
 #
@@ -32,31 +32,32 @@ fi
 
 # Lazy-load node version manager
 
-nvm() {
-    unset -f nvm
+init_nvm() {
     export NVM_DIR=~/.nvm
     [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
+}
+
+nvm() {
+    unset -f nvm
+    init_nvm
     nvm "$@"
 }
 
 node() {
     unset -f node
-    export NVM_DIR=~/.nvm
-    [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
+    init_nvm
     node "$@"
 }
 
 npm() {
     unset -f npm
-    export NVM_DIR=~/.nvm
-    [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
+    init_nvm
     npm "$@"
 }
 
 npx() {
     unset -f npx
-    export NVM_DIR=~/.nvm
-    [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
+    init_nvm
     npx "$@"
 }
 
@@ -67,3 +68,14 @@ alias vim="node -v >/dev/null && vim"
 path+=$(go env GOPATH)/bin
 export PATH
 
+# Fix grep color
+export GREP_COLOR="1;33"
+export GREP_COLORS="mt=1;33"
+
+# Bat configuration
+export BAT_PAGER="less -g -i -M -R -S -w -#4 --window=4"
+
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# zprof
