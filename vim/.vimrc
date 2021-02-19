@@ -24,6 +24,7 @@ map <ScrollWheelDown> <C-E>
 syntax enable " enable syntax processing
 set background=dark
 colorscheme gruvbox
+hi Visual cterm=none ctermbg=darkgrey
 set cursorline " highlight current line
 set colorcolumn=80 " mark column 80 with vertical line
 set number relativenumber " show relative line numbers, except current line
@@ -83,8 +84,8 @@ onoremap <up> gk
 onoremap <down> gj
 
 " Mappings for moving around buffers
-nnoremap <C-n> :bprevious<CR>
-nnoremap <C-m> :bnext<CR>
+nnoremap <C-p> :bprevious<CR>
+nnoremap <C-n> :bnext<CR>
 nnoremap <leader>fc :bdelete<CR>
 
 " Mappings for motion
@@ -99,9 +100,13 @@ inoremap <C-l> <Right>
 
 " Mappings for paging and scrolling
 nnoremap K 5k
+vnoremap K 5k
 nnoremap J 5j
+vnoremap J 5j
 nnoremap <C-k> <C-y>
+vnoremap <C-k> <C-y>
 nnoremap <C-j> <C-e>
+vnoremap <C-j> <C-e>
 nnoremap M J
 
 " Mappings to make Y work like C and D
@@ -146,16 +151,19 @@ call plug#begin('~/.vim/plugged')
 " NERD tree will be loaded on the first invocation of NERDTreeToggle command
 Plug 'preservim/nerdtree', { 'on': 'NERDTreeToggle' }
 Plug 'easymotion/vim-easymotion'
-Plug 'tpope/vim-fugitive' " need to create mappings
+Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-repeat'
+Plug 'bkad/camelcasemotion'
 Plug 'justinmk/vim-sneak'
+Plug 'vim-scripts/ReplaceWithRegister'
+Plug 'machakann/vim-highlightedyank'
+Plug 'vim-scripts/argtextobj.vim'
 Plug 'romainl/vim-cool' " auto clear search highlighting
 Plug 'ryanoasis/vim-devicons'
 Plug 'preservim/tagbar'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
@@ -163,8 +171,9 @@ Plug 'yggdroot/indentline'
 Plug 'tell-k/vim-autopep8'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
+Plug 'terryma/vim-smooth-scroll'
 call plug#end()
-
+"
 " --Airline Configuration--
 let g:airline#extensions#tabline#enabled = 1 " add tabline
 let g:airline#extensions#coc#enabled = 1 " integrate with coc
@@ -178,12 +187,21 @@ let NERDTreeStatusline=-1 " use global status line
 let NERDTreeShowHidden=1
 let NERDTreeMouseMode=2 " single click to open directories
 
-" --Easymotion configuration--
+" --Easymotion Configuration--
 let g:EasyMotion_smartcase = 1 " Turn on case-insensitive feature
 
-" --Commentary Configuration--
-map <Leader>cc <Plug>CommentaryLine
-map <Leader>c <Plug>Commentary
+" --CamelCaseMotion Configuration--
+let g:camelcasemotion_key = '<leader>'
+
+" --Sneak Configuration--
+map f <Plug>Sneak_f
+map F <Plug>Sneak_F
+map t <Plug>Sneak_t
+map T <Plug>Sneak_T
+highlight link Sneak None
+
+" --HighlightedYank Configuration--
+let g:highlightedyank_highlight_duration = 250
 
 " --FZF Configuration--
 nnoremap <silent> <leader>fo :Files<CR>|   " Open new Buffer
@@ -212,96 +230,10 @@ autocmd FileType go nmap <leader>gd <Plug>(go-doc)
 nmap <leader>t :TagbarToggle<CR>
 let g:tagbar_autoclose = 1 " press 'c' to keep open
 
-"""""""""""""""""""""
-" Coc Configuration "
-"""""""""""""""""""""
-
-let g:coc_global_extensions = [
-  \ 'coc-snippets',
-  \ 'coc-pairs',
-  \ 'coc-tsserver',
-  \ 'coc-eslint',
-  \ 'coc-prettier',
-  \ 'coc-json',
-  \ 'coc-python',
-  \ 'coc-vimlsp',
-  \ 'coc-go',
-  \ 'coc-yaml'
-  \ ]
-
-set updatetime=300
-
-" don't give |ins-completion-menu| messages.
-set shortmess+=c
-
-" Use tab for trigger completion with characters ahead and navigate.
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
-
-" Use <c-space> to trigger completion.
-inoremap <silent><expr> <c-@> coc#refresh()
-
-" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
-" Coc only does snippet and additional edit on confirm.
-" inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-" Or use `complete_info` if your vim supports it, like:
-inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
-
-" Use `[g` and `]g` to navigate diagnostics
-nmap <silent> [g <Plug>(coc-diagnostic-prev)
-nmap <silent> ]g <Plug>(coc-diagnostic-next)
-
-" Remap keys for gotos
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
-
-" Shortcut to show documentation in preview window
-nnoremap <silent> gk :call <SID>show_documentation()<CR>
-
-function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  else
-    call CocAction('doHover')
-  endif
-endfunction
-
-" Highlight symbol under cursor on CursorHold
-autocmd CursorHold * silent call CocActionAsync('highlight')
-
-" Create mappings for function text object, requires document symbols feature of languageserver.
-xmap if <Plug>(coc-funcobj-i)
-xmap af <Plug>(coc-funcobj-a)
-omap if <Plug>(coc-funcobj-i)
-omap af <Plug>(coc-funcobj-a)
-xmap ic <Plug>(coc-classobj-i)
-omap ic <Plug>(coc-classobj-i)
-xmap ac <Plug>(coc-classobj-a)
-omap ac <Plug>(coc-classobj-a)
-
-" Remap <C-f> and <C-b> for scroll float windows/popups.
-" Note coc#float#scroll works on neovim >= 0.4.0 or vim >= 8.2.0750
-nnoremap <nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
-nnoremap <nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
-inoremap <nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
-inoremap <nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
-
-" Use `:Format` to format current buffer
-command! -nargs=0 Format :call CocAction('format')
-
-" Use `:Fold` to fold current buffer
-command! -nargs=? Fold :call     CocAction('fold', <f-args>)
-
-" use `:OR` for organize import of current buffer
-command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
+" --Smooth Scroll Configuration--
+" Arguments: distance to scroll, duration per frame, lines per frame
+noremap <silent> <c-u> :call smooth_scroll#up(5, 5, 1)<CR>
+noremap <silent> <c-d> :call smooth_scroll#down(5, 5, 1)<CR>
+noremap <silent> <c-b> :call smooth_scroll#up(35, 5, 1)<CR>
+noremap <silent> <c-f> :call smooth_scroll#down(35, 5, 1)<CR>
 
