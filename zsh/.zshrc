@@ -1,81 +1,64 @@
-# zmodload zsh/zprof
+# Zsh configuration
 #
-# Executes commands at the start of an interactive session.
+# Use `brew` to install plugins and utilities:
 #
-# Authors:
-#   Sorin Ionescu <sorin.ionescu@gmail.com>
-#
+# ```
+# brew install \
+#   zsh-completions \
+#   zsh-autosuggestions \
+#   zsh-syntax-highlighting \
+#   zsh-history-substring-search \
+#   powerlevel10k \
+#   zoxide \
+#   fzf \
+#   exa
+# ```
 
-# Source Prezto.
-if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
-  source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-#
-# My Stuff
-#
+# Initialize pyenv.
+export PYENV_ROOT="$HOME/.pyenv"
+[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
 
-# Easily get to Vim command mode for faster editing
+# Zsh completion, syntax highlighting, history search, and autosuggestions.
+FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
+autoload -Uz compinit
+compinit
+zstyle ':completion:*' menu select
+source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+source $(brew --prefix)/share/zsh-history-substring-search/zsh-history-substring-search.zsh
+bindkey '^[[A' history-substring-search-up
+bindkey '^[[B' history-substring-search-down
+
+# Initialize `z` autojump utility.
+eval "$(zoxide init zsh)"
+
+# Enter vim editing mode with `jk`.
 bindkey jk vi-cmd-mode
 
-# Use ls-deluxe instead of ls
-DISABLE_LS_COLORS="true"
-alias ls='lsd'
+# Open command in editor with `<C-x><C-e>`.
+autoload -z edit-command-line
+zle -N edit-command-line
+bindkey "^X^E" edit-command-line
 
-# Shortcut to love2d game framework
-alias love="/Applications/love.app/Contents/MacOS/love"
+# Add aliases.
+alias la='exa -la'
+alias ll='exa -l'
 
-# Pyenv setup
-if command -v pyenv 1>/dev/null 2>&1; then
-  eval "$(pyenv init -)"
-fi
+# Set options.
+setopt AUTO_CD    # Just type the directory name to cd somehwere.
+setopt NO_CLOBBER # Must use `>|` to clobber instead of just `>`.
 
-# Lazy-load node version manager
-
-init_nvm() {
-    export NVM_DIR=~/.nvm
-    [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
-}
-
-nvm() {
-    unset -f nvm
-    init_nvm
-    nvm "$@"
-}
-
-node() {
-    unset -f node
-    init_nvm
-    node "$@"
-}
-
-npm() {
-    unset -f npm
-    init_nvm
-    npm "$@"
-}
-
-npx() {
-    unset -f npx
-    init_nvm
-    npx "$@"
-}
-
-# Vim needs node for Coc plugin, so made sure it is loaded before starting
-alias vim="node -v >/dev/null && vim"
-
-# Add Go directory to path
-path+=$(go env GOPATH)/bin
-export PATH
-
-# Fix grep color
-export GREP_COLOR="1;33"
-export GREP_COLORS="mt=1;33"
-
-# Bat configuration
-export BAT_PAGER="less -g -i -M -R -S -w -#4 --window=4"
-
-
+# `fzf` setup.
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-# zprof
+# Initialize prompt. To customize, run `p10k configure` or edit ~/.p10k.zsh.
+source /opt/homebrew/share/powerlevel10k/powerlevel10k.zsh-theme
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
